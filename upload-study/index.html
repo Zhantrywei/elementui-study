@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+        <title>ElementUI Upload</title>
+        <link rel="stylesheet" href="/lib/elementui@2.8.2/index.css" />
+        <style>
+            [v-cloak] {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app" v-cloak>
+            <h1>ElementUI Upload1</h1>
+            <el-upload
+                class="upload-demo"
+                :action="action"
+                :headers="headers"
+                :multiple="multiple"
+                testdata="data"
+                :name="name"
+                :with-credentials="withCredentials"
+                :show-file-list="showFileList"
+                :drag="drag"
+                :accept="accept"
+                :on-preview="handlePreview"
+                :on-remove="handleRemove"
+                :on-success="handleSuccess"
+                :on-error="handleError"
+                :on-progress="handleProgress"
+                :on-change="handleChange"
+                :before-upload="beforeUpload"
+                :before-remove="beforeRemove"
+                :list-type="listType"
+                :auto-upload="autoUpload"
+                :file-list="fileList"
+                testhttp-request="httpRequest"
+                :disabled="disabled"
+                :limit="limit"
+                :on-exceed="handleExceed"
+                ref="upload1"
+            >
+                <el-button
+                    slot="trigger"
+                    size="small"
+                    type="primary"
+                    @click.stop="btnClick('upload1')"
+                    >点击上传</el-button
+                >
+                <el-collapse-transition>
+                    <el-progress
+                        :percentage="uploadProgress"
+                        v-show="progressShow"
+                    ></el-progress>
+                </el-collapse-transition>
+                <div slot="tip" class="el-upload__tip">
+                    只能上传jpg/png文件，且不超过500kb
+                </div>
+            </el-upload>
+        </div>
+        <script src="https://cdn.bootcss.com/vue/2.6.10/vue.js"></script>
+        <script src="/lib/elementui@2.8.2/index.js"></script>
+        <script>
+            var vm = new Vue({
+                el: "#app",
+                data: function() {
+                    return {
+                        action: "/api/upload/",
+                        multiple: true,
+                        data: {
+                            dataTest: 1
+                        },
+                        name: "test",
+                        withCredentials: true,
+                        showFileList: true,
+                        drag: false,
+                        accept: "image/*",
+                        listType: "text", //text/picture/picture-card
+                        autoUpload: true,
+                        fileList: [],
+                        disabled: false,
+                        limit: 3,
+                        uploadProgress: 0,
+                        progressShow: false
+                    };
+                },
+                computed: {
+                    headers: function() {
+                        return {};
+                    }
+                },
+                methods: {
+                    // 点击文件列表中已上传的文件时的钩子
+                    handlePreview(file) {
+                        console.log("TCL: handlePreview -> file", file);
+                        if (file.response && file.response.url) {
+                            window.open(file.response.url);
+                        }
+                    },
+                    // 文件列表移除文件时的钩子
+                    handleRemove(file, fileList) {
+                        console.log(
+                            "TCL: handleRemove -> file, fileList",
+                            file,
+                            fileList
+                        );
+                        this.fileList = fileList;
+                        this.changeUploadBtnDisabled();
+                    },
+                    // 文件上传成功时的钩子
+                    handleSuccess(response, file, fileList) {
+                        console.log(
+                            "TCL: handleSuccess -> response, file, fileList",
+                            response,
+                            file,
+                            fileList
+                        );
+                        this.progressShow = false;
+                        this.fileList = fileList;
+                        this.changeUploadBtnDisabled();
+                    },
+                    // 文件上传失败时的钩子
+                    handleError(err, file, fileList) {
+                        console.log(
+                            "TCL: handleError -> err, file, fileList",
+                            err,
+                            file,
+                            fileList
+                        );
+                        this.progressShow = false;
+                    },
+                    // 文件上传时的钩子
+                    handleProgress(event, file, fileList) {
+                        debugger
+                        console.log(
+                            "TCL: handleProgress -> event, file, fileList",
+                            event,
+                            file,
+                            fileList
+                        );
+                        this.progressShow = true;
+                        // this.uploadProgress = parseInt(file.percentage);    //这个获取是不正确的，存在上传进度问题
+                        this.uploadProgress = parseInt(event.percent);
+                    },
+                    // 文件状态改变时的钩子，添加文件、上传成功和上传失败时都会被调用
+                    handleChange(file, fileList) {
+                        console.log(
+                            "TCL: handleChange -> file, fileList",
+                            file,
+                            fileList
+                        );
+                    },
+                    // 上传文件之前的钩子，参数为上传的文件，若返回 false 或者返回 Promise 且被 reject，则停止上传。
+                    beforeUpload(file) {
+                        console.log("TCL: beforeUpload -> file", file);
+                        this.uploadProgress = 0;
+                        // let regImage = /(\/jpg|\/jpeg|\/gif|\/png|\/bmp)$/;
+                        // let _this = this;
+                        // if (!regImage.test(file.type)) {
+                        //     this.$AlertTip("请上传正确的图片格式文件");
+                        //     return false;
+                        // }
+                        // const isLt2M = file.size / 1024 / 1024 < 2;
+                        // if (!isLt2M) {
+                        //     this.$AlertTip("上传的图片最大不能超过2M");
+                        //     return false;
+                        // }
+                        // const isSize = new Promise(function(resolve, reject) {
+                        //     let width = 200;
+                        //     let height = 200;
+                        //     let _URL = window.URL || window.webkitURL;
+                        //     let img = new Image();
+                        //     img.onload = function() {
+                        //         let valid =
+                        //             img.width == width && img.height == height;
+                        //         valid ? resolve() : reject();
+                        //     };
+                        //     img.src = _URL.createObjectURL(file);
+                        // }).then(
+                        //     () => {
+                        //         return file;
+                        //     },
+                        //     () => {
+                        //         _this.$AlertTip("上传的icon必须是200*200!");
+                        //         return Promise.reject();
+                        //     }
+                        // );
+                        // return isSize;
+                    },
+                    // 删除文件之前的钩子，参数为上传的文件和文件列表，若返回 false 或者返回 Promise 且被 reject，则停止删除。
+                    beforeRemove(file, fileList) {
+                        console.log(
+                            "TCL: beforeRemove -> file, fileList",
+                            file,
+                            fileList
+                        );
+                    },
+                    // 覆盖默认的上传行为，可以自定义上传的实现
+                    httpRequest() {
+                        console.log("TCL: httpRequest -> httpRequest");
+                    },
+                    // 文件超出个数限制时的钩子
+                    handleExceed(files, fileList) {
+                        console.log(
+                            "TCL: handleExceed -> files, fileList",
+                            files,
+                            fileList
+                        );
+                    },
+                    btnClick(refsName) {
+                        console.log("btnClick", event);
+                        if (this.fileList.length < this.limit) {
+                            var input = this.$refs[refsName].$refs[
+                                "upload-inner"
+                            ].$refs["input"];
+                            input.value = null;
+                            input.click();
+                        }
+                    },
+                    changeUploadBtnDisabled() {
+                        var button = this.$refs["upload1"].$refs["upload-inner"]
+                            .$children[0].$el;
+                        if (this.fileList.length >= this.limit) {
+                            // 加上is-disabled类
+                            button.classList.add("is-disabled");
+                        } else {
+                            // 去掉is-disabled类
+                            button.classList.remove("is-disabled");
+                        }
+                    }
+                }
+            });
+        </script>
+    </body>
+</html>

@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8" />
+        <meta
+            name="viewport"
+            content="width=device-width,initial-scale=1.0 user-scalable = no , maximum-scale=1.0"
+        />
+        <!-- import CSS -->
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/element-ui/lib/theme-chalk/index.css"
+        />
+        <link
+            rel="stylesheet"
+            href="https://unpkg.com/element-ui/lib/theme-chalk/display.css"
+        />
+        <style>
+            html,
+            body {
+                overflow-x: hidden;
+            }
+            [v-cloak] {
+                display: none;
+            }
+            * {
+                padding: 0;
+                margin: 0;
+            }
+            .row-class {
+                background: lightblue;
+                padding: 20px 0;
+                margin: 20px;
+            }
+            .el-col {
+                border-radius: 4px;
+            }
+            .col-class {
+                /* margin: 10px  */
+                background: lightcoral;
+            }
+            .col-class:nth-of-type(2) {
+                /* margin: 10px  */
+                background: lightgreen;
+            }
+            .bg-purple {
+                background: #d3dce6;
+            }
+            .grid-content {
+                border-radius: 4px;
+                min-height: 36px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="app" v-cloak>
+            <ul>
+                <li>
+                    <h2>1. Element Layout布局</h2>
+                    <el-row class="row-class" :gutter="40">
+                        <el-col :span="12"
+                            ><div class="col-class">第一列</div></el-col
+                        >
+                        <el-col :span="12"
+                            ><div class="col-class">第二列</div></el-col
+                        >
+                    </el-row>
+                    <el-row class="row-class" :gutter="20">
+                        <el-col :span="6"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                        <el-col :span="6"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                        <el-col :span="6"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                        <el-col :span="6"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                    </el-row>
+                    <el-row class="row-class" :gutter="20">
+                        <el-col :span="6"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                        <el-col :span="6" :push="6"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                    </el-row>
+                    <el-row class="row-class" :gutter="20">
+                        <el-col :span="6"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                        <el-col :span="6" :offset="6"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                    </el-row>
+                    <el-row class="row-class" :gutter="20">
+                        <el-col :span="6"
+                            ><div
+                                class="grid-content  hidden-xs-only bg-purple"
+                            >
+                                11111
+                            </div></el-col
+                        >
+                        <el-col :span="6" :offset="8" :pull="8"
+                            ><div class="grid-content bg-purple">
+                                222222222
+                            </div></el-col
+                        >
+                    </el-row>
+                    <el-row :gutter="10">
+                        <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                        <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                        <el-col :xs="4" :sm="6" :md="8" :lg="9" :xl="11"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                        <el-col :xs="8" :sm="6" :md="4" :lg="3" :xl="1"
+                            ><div class="grid-content bg-purple"></div
+                        ></el-col>
+                    </el-row>
+                </li>
+                <li>
+                    <h2>2. Container布局容器</h2>
+                    <el-container>
+                        <el-aside width="20%" style="background-color: #d3dce6;">Aside</el-aside>
+                        <el-container>
+                            <el-header style="background-color: #b3c0d1;">Header</el-header>
+                            <el-main style="background-color: #e9eef3;">Main</el-main>
+                            <el-footer style="background-color: #b3c0d1;">Footer</el-footer>
+                        </el-container>
+                    </el-container>
+                </li>
+            </ul>
+        </div>
+    </body>
+    <!-- import Vue before Element -->
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <!-- import JavaScript -->
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script>
+        new Vue({
+            el: "#app",
+            data: function() {
+                return { visible: false };
+            }
+        });
+    </script>
+</html>
